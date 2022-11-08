@@ -20,6 +20,7 @@ router.post('/login', async function (req, res, next) {
 
     if (userLogin) {
         const token = jwt.sign({ username }, SECRET_KEY);
+        //TODO:update login time
         return res.json({ token });
     }
 

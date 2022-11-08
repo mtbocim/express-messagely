@@ -37,7 +37,7 @@ router.get(
         ) {
             return res.json({ message: message });
         }
-        throw new UnauthorizedError("You are not allowed to view this message")
+        throw new UnauthorizedError("You are not allowed to view this message");
     });
 
 /** POST / - post message.
@@ -49,7 +49,7 @@ router.get(
 router.post(
     '/',
     ensureLoggedIn,
-    ensureCorrectUser,
+    //ensureCorrectUser,
     async function (req, res, next) {
 
         const from_username = res.locals.user.username;
@@ -76,12 +76,12 @@ router.post(
 router.post(
     '/:id/read',
     ensureLoggedIn,
-    ensureCorrectUser,
+    //ensureCorrectUser,
     async function (req, res, next) {
         const message = await Message.get(req.params.id);
         const currentUsername = res.locals.user.username;
 
-        if (currentUsername = message.to_username) {
+        if (currentUsername === message.to_username) {
             const readMessage = await Message.markRead(req.params.id);
             return res.json({ message: readMessage });
         }
