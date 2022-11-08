@@ -18,7 +18,7 @@ router.get(
     ensureLoggedIn,
     async function (req, res, next) {
         const users = await User.all()
-        return res.json({ users });
+        return res.json({ users: users });
     });
 
 
@@ -33,7 +33,7 @@ router.get(
     ensureCorrectUser,
     async function (req, res, next) {
         const user = await User.get(req.params.username);
-        return res.json({ user });
+        return res.json({ user: user });
     });
 
 /** GET /:username/to - get messages to user
@@ -51,7 +51,7 @@ router.get(
     ensureCorrectUser,
     async function (req, res, next) {
         const messagesToUser = await User.messagesTo(req.params.username);
-        return res.json({ messagesToUser });
+        return res.json({ messages: messagesToUser });
     });
 
 
@@ -70,7 +70,7 @@ router.get(
     ensureCorrectUser,
     async function (req, res, next) {
         const messagesFromUser = await User.messagesFrom(req.params.username);
-        return res.json({ messagesFromUser });
+        return res.json({ messages: messagesFromUser });
     })
 
 module.exports = router;

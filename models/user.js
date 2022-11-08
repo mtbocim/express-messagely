@@ -9,7 +9,11 @@ const { NotFoundError, BadRequestError } = require("../expressError");
 
 class User {
 
-  /** Register new user. Returns
+  /** Register new user. 
+   * 
+   * Accepts an object { username, password, first_name, last_name, phone }
+   * 
+   * Returns
    *    {username, password, first_name, last_name, phone}
    */
 
@@ -74,7 +78,7 @@ class User {
     return false;
   }
 
-  /** Update last_login_at for user */
+  /** Update last_login_at for user, returns updated login time*/
 
   static async updateLoginTimestamp(username) {
     const results = await db.query(

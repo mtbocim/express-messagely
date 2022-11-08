@@ -24,17 +24,19 @@ router.get(
     '/:id',
     ensureLoggedIn,
     async function (req, res, body) {
-
         const message = await Message.get(req.params.id);
 
-        const fromUsername = message.from_username;
-        const toUsername = message.to_username;
+        const fromUsername = message.from_user.username;
+        const toUsername = message.to_user.username;
         const username = res.locals.user.username;
 
-        if (username === fromUsername || username === toUsername) {
-            return res.status(201).json({ message: message });
+        if (fromUsername &&
+            toUsername &&
+            username === fromUsername ||
+            username === toUsername
+        ) {
+            return res.json({ message: message });
         }
-
         throw new UnauthorizedError("You are not allowed to view this message")
     });
 
@@ -61,7 +63,7 @@ router.post(
                 body
             });
 
-        return { message: newMessage }
+        return res.status(201).json({ message: newMessage });
     });
 
 /** POST/:id/read - mark message as read:
@@ -74,14 +76,14 @@ router.post(
 router.post(
     '/:id/read',
     ensureLoggedIn,
+    ensureCorrectUser,
     async function (req, res, next) {
         const message = await Message.get(req.params.id);
+        const currentUsername = res.locals.user.username;
 
-        const currentUser = res.locals.user.username;
-
-        if (currentUser = message.to_username) {
+        if (currentUsername = message.to_username) {
             const readMessage = await Message.markRead(req.params.id);
-            return readMessage;
+            return res.json({ message: readMessage });
         }
 
         throw new UnauthorizedError(
