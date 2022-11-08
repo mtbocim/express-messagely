@@ -3,7 +3,7 @@
 const db = require("../db");
 const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR } = require("../config");
-const { NotFoundError, BadRequestError, UnauthorizedError } = require("../expressError");
+const { NotFoundError, BadRequestError } = require("../expressError");
 
 /** User of the site. */
 
@@ -14,7 +14,6 @@ class User {
    */
 
   static async register({ username, password, first_name, last_name, phone }) {
-    
     const hashPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
     const results = await db.query(
@@ -45,10 +44,9 @@ class User {
       ]
     );
     let user = results.rows[0];
-    //console.log(user);
-    //console log results.rows to look at data
+  
     if (user === undefined) throw new BadRequestError("Unable to create user");
-    
+    //console.log(user);
     return user;
   }
 
@@ -56,7 +54,7 @@ class User {
   /** Authenticate: is username/password valid? Returns boolean. */
 
   static async authenticate(username, password) {
-
+    console.log("In authenticate function")
 
     const results = await db.query(
       `

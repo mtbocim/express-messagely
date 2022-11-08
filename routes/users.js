@@ -1,7 +1,10 @@
 "use strict";
 
+const User = require("../models/user");
+
 const Router = require("express").Router;
 const router = new Router();
+const { authenticateJWT } = require("../middleware/auth");
 
 
 /** GET / - get list of users.
@@ -9,6 +12,10 @@ const router = new Router();
  * => {users: [{username, first_name, last_name}, ...]}
  *
  **/
+router.get('/', async function(req,res,next){
+    const users = await User.all()
+    return res.json({users});
+});
 
 
 /** GET /:username - get detail of users.
@@ -16,7 +23,10 @@ const router = new Router();
  * => {user: {username, first_name, last_name, phone, join_at, last_login_at}}
  *
  **/
-
+router.get('/:username', async function(req,res,next){
+    const user = await User.get(req.params.username);
+    return res.json({user});
+});
 
 /** GET /:username/to - get messages to user
  *
