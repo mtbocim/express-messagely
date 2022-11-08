@@ -22,7 +22,7 @@ router.post('/login', async function (req, res, next) {
         const token = jwt.sign({ username }, SECRET_KEY);
         return res.json({ token });
     }
-    
+
     throw new UnauthorizedError("Invalid username/password");
 
 });
@@ -32,16 +32,12 @@ router.post('/login', async function (req, res, next) {
  * {username, password, first_name, last_name, phone} => {token}.
  */
 router.post('/register', async function (req, res, next) {
-    console.log("attempted registrations");
     if (req.body === undefined) throw new BadRequestError();
 
-    const {username} = await User.register(req.body);
-    
-    //const { username } = req.body;
-    
+    const { username } = await User.register(req.body);
+
     const token = jwt.sign({ username }, SECRET_KEY);
     return res.json({ token });
-
 });
 
 module.exports = router;
